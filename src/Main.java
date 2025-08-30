@@ -4,12 +4,12 @@ import java.util.Scanner;
 public class Main {
     public static final char [][] jogo = new char [3][3];
     public static void tabuleiro () {
-        for (int i = 0; i < jogo.length; i++) {
-            for (int j = 0; j < jogo[i].length; j++) {
-                if (jogo[i][j] == 0) {
+        for (char[] linha : jogo) {
+            for (char celula : linha) {
+                if (celula == 0) {
                     System.out.print("[ ]");
                 }else {
-                    System.out.printf("[%c]", jogo[i][j]);
+                    System.out.printf("[%c]", celula);
                 }
             }
             System.out.println();
@@ -23,31 +23,14 @@ public class Main {
         jogo[l][c] = 'O';
         tabuleiro();
     }
-    public static void vencedor (int  l, int c) {
-        if (jogo[l][c] == 'X') {
-            System.out.println("JOGADOR 1 GANHOU!!!");
-            System.exit(0);
-        }else if (jogo[l][c] == 'O')  {
-            System.out.println("JOGADOR 2 GANHOU!!!");
-            System.exit(0);
-        }
-    }
-    public static void verificador() {
+    public static boolean verificador(char simbolo) {
         for (int i = 0; i < 3; i++) {
-            if (jogo[i][0] == jogo[i][1] && jogo[i][1] == jogo[i][2] && jogo[i][0] != 0) {
-                vencedor(i, 0);
-            }
+            if (jogo[i][0] == simbolo && jogo[i][1] == simbolo && jogo[i][2] == simbolo) return true;
+            if (jogo[0][i] == simbolo && jogo[1][i] == simbolo && jogo[2][i] == simbolo) return true;
         }
-        for (int j = 0; j < 3; j++) {
-            if (jogo[0][j] == jogo[1][j] && jogo[1][j] == jogo[2][j] && jogo[0][j] != 0) {
-                vencedor(0, j);
-            }
-        }
-        if (jogo[0][0] == jogo[1][1] && jogo[1][1] == jogo[2][2] && jogo[0][0] != 0) {
-            vencedor(0, 0);
-        }else if (jogo[2][0] == jogo[1][1] && jogo[1][1] == jogo[0][2] && jogo[2][0] != 0) {
-            vencedor(1, 1);
-        }
+        if (jogo[0][0] == simbolo && jogo[1][1] == simbolo && jogo[2][2] == simbolo) return true;
+        if (jogo[0][2] == simbolo && jogo[1][1] == simbolo && jogo[2][0] == simbolo) return true;
+        return false;
     }
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -78,7 +61,10 @@ public class Main {
             }while (!entradaV);
             jogador1((player1L - 1), (player1C - 1));
 
-            verificador();
+            if (verificador('X')) {
+                System.out.println("JOGADOR 1 GANHOU!!!");
+                System.exit(0);
+            }
 
             if (i == 4) {
                 System.out.println("Deu velha :(");
@@ -103,7 +89,10 @@ public class Main {
             }while (!entradaV);
             jogador2((player2L - 1), (player2C - 1));
 
-            verificador();
+            if (verificador('O')) {
+                System.out.println("JOGADOR 2 GANHOU!!!");
+                System.exit(0);
+            }
         }
     }
 }
